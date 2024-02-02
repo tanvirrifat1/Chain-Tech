@@ -43,6 +43,7 @@ const SignUp = () => {
   };
 
   const onSubmit = async (data) => {
+    console.log(data);
     setLoading(true);
 
     if (!image) {
@@ -59,7 +60,9 @@ const SignUp = () => {
 
     if (imageUrl) {
       // If image upload is successful, update the data object
-      data.profileImage = imageUrl;
+      data.image = imageUrl;
+      console.log(imageUrl, "hheh");
+      console.log(data.profileImage, "223223");
 
       // POST request to your local API
       const apiUrl = "http://localhost:5000/api/v1/user";
@@ -68,7 +71,7 @@ const SignUp = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data), // data object with imageUrl included
       });
 
       if (apiResponse.ok) {
@@ -77,7 +80,7 @@ const SignUp = () => {
         console.log(responseData);
 
         Swal.fire("User signed up successfully!!");
-        router("/");
+        router("/login");
       } else {
         // Handle the case where the API request was not successful
         console.error(
@@ -90,6 +93,58 @@ const SignUp = () => {
       setLoading(false);
     }
   };
+
+  // const onSubmit = async (data) => {
+  //   console.log(data);
+  //   setLoading(true);
+
+  //   if (!image) {
+  //     console.log("Please select image!");
+  //     setLoading(false); // Make sure to set loading to false in case of an early return
+  //     return;
+  //   }
+
+  //   const formData = new FormData();
+  //   formData.append("image", image);
+
+  //   // Upload image
+  //   const imageUrl = await uploadImage(formData);
+
+  //   if (imageUrl) {
+  //     // If image upload is successful, update the data object
+  //     data.profileImage = imageUrl;
+  //     console.log(imageUrl, "hheh");
+  //     console.log(data.profileImage, "223223");
+
+  //     // POST request to your local API
+  //     const apiUrl = "http://localhost:5000/api/v1/user";
+  //     const apiResponse = await fetch(apiUrl, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(data),
+  //     });
+
+  //     if (apiResponse.ok) {
+  //       const responseData = await apiResponse.json();
+  //       // Handle the response from your API as needed
+  //       console.log(responseData);
+
+  //       Swal.fire("User signed up successfully!!");
+  //       // router("/");
+  //     } else {
+  //       // Handle the case where the API request was not successful
+  //       console.error(
+  //         "Failed to make API request:",
+  //         apiResponse.status,
+  //         apiResponse.statusText
+  //       );
+  //     }
+
+  //     setLoading(false);
+  //   }
+  // };
 
   // const onSubmit = async (data) => {
   //   setLoading(true);
@@ -148,6 +203,7 @@ const SignUp = () => {
                   <input
                     type="file"
                     accept="image/*"
+                    name="image"
                     onChange={handleImageChange}
                     className="form-control"
                   />
