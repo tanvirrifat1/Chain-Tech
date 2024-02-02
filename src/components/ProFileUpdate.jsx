@@ -1,20 +1,43 @@
-import { useContext, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
-
-import { toast } from "react-toastify";
-
 import { BiArrowBack } from "react-icons/bi";
-
-// import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import FormInput from "./Shared/formInput";
 import Form from "./Shared/form";
+import FormInput from "./Shared/formInput";
+import { getUserInfo } from "./Auth/auth.server";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
-const SignUp = () => {
-  const router = useNavigate();
+const ProFileUpdate = () => {
+  const { userId, role } = getUserInfo();
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const router = useNavigate();
+
+  const {
+    data: cart = [],
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["cart", userId],
+    queryFn: async () => {
+      const res = await fetch(`http://localhost:5000/api/v1/user/${userId}`);
+      return res.json();
+    },
+  });
+
+  const Values = {
+    address: cart?.data?.address,
+    contactNo: cart?.data?.contactNo,
+    email: cart?.data?.email,
+    image: cart?.data?.image,
+    name: cart?.data?.name,
+    password: cart?.data?.password,
+  };
+
+  if (isLoading) {
+    <p>Loading...</p>;
+  }
 
   const handleImageChange = (e) => {
     const file = e.target.files && e.target.files[0];
@@ -47,9 +70,9 @@ const SignUp = () => {
     setLoading(true);
 
     if (!image) {
-      console.log("Please select image!");
-      setLoading(false); // Make sure to set loading to false in case of an early return
-      return;
+      Swal.fire("Please select Image!");
+      setLoading(false);
+      return; // Make sure to set loading to false in case of an early return
     }
 
     const formData = new FormData();
@@ -61,13 +84,11 @@ const SignUp = () => {
     if (imageUrl) {
       // If image upload is successful, update the data object
       data.image = imageUrl;
-      console.log(imageUrl, "hheh");
-      console.log(data.profileImage, "223223");
 
       // POST request to your local API
-      const apiUrl = "http://localhost:5000/api/v1/user";
+      const apiUrl = `http://localhost:5000/api/v1/user/${userId}`;
       const apiResponse = await fetch(apiUrl, {
-        method: "POST",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
@@ -80,7 +101,7 @@ const SignUp = () => {
         console.log(responseData);
 
         Swal.fire("User signed up successfully!!");
-        router("/login");
+        router("/");
       } else {
         // Handle the case where the API request was not successful
         console.error(
@@ -103,7 +124,7 @@ const SignUp = () => {
       </Link>
 
       <div className="container-xl w-40 px-5 py-5 border border-gray-900 mt-5">
-        <Form submitHandler={onSubmit}>
+        <Form submitHandler={onSubmit} defaultValues={Values}>
           <div className="space-y-4">
             <div className="border-bottom pb-4">
               <h2 className="text-base font-semibold text-gray-900">Profile</h2>
@@ -120,6 +141,7 @@ const SignUp = () => {
                     onChange={handleImageChange}
                     className="form-control"
                   />
+                  {image && <p>{image.name}</p>}
                 </div>
               </div>
             </div>
@@ -211,4 +233,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default ProFileUpdate;

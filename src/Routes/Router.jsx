@@ -4,6 +4,7 @@ import Home from "../components/Home";
 import Main from "../components/Layout/Main";
 import SignUp from "../components/SignUp";
 import Login from "../components/Login";
+import ProFileUpdate from "../components/ProFileUpdate";
 
 export const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ export const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/:id",
+        element: <ProFileUpdate />,
       },
 
       {
