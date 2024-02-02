@@ -1,5 +1,5 @@
 import { Controller, useForm, useFormContext } from "react-hook-form";
-import { getErrorMessageByPropertyName } from "./schema.validator";
+import { getErrorMessageByPropertyName } from "./schema";
 
 const FormInput = ({
   name,
