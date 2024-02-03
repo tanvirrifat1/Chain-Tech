@@ -21,7 +21,9 @@ const ProFileUpdate = () => {
   } = useQuery({
     queryKey: ["cart", userId],
     queryFn: async () => {
-      const res = await fetch(`http://localhost:5000/api/v1/user/${userId}`);
+      const res = await fetch(
+        `https://chain-tech-server-lime.vercel.app/api/v1/user/${userId}`
+      );
       return res.json();
     },
   });
@@ -83,7 +85,7 @@ const ProFileUpdate = () => {
     if (imageUrl) {
       data.image = imageUrl;
 
-      const apiUrl = `http://localhost:5000/api/v1/user/${userId}`;
+      const apiUrl = `https://chain-tech-server-lime.vercel.app/api/v1/user/${userId}`;
       const apiResponse = await fetch(apiUrl, {
         method: "PATCH",
         headers: {
@@ -97,7 +99,7 @@ const ProFileUpdate = () => {
 
         console.log(responseData);
 
-        Swal.fire("User signed up successfully!!");
+        Swal.fire("Profile Updated successfully!!");
         router("/other");
       } else {
         console.error(

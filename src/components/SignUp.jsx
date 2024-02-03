@@ -59,7 +59,7 @@ const SignUp = () => {
       console.log(imageUrl, "hheh");
       console.log(data.profileImage, "223223");
 
-      const apiUrl = "http://localhost:5000/api/v1/user";
+      const apiUrl = "https://chain-tech-server-lime.vercel.app/api/v1/user";
       const apiResponse = await fetch(apiUrl, {
         method: "POST",
         headers: {

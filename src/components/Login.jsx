@@ -23,7 +23,7 @@ const Login = () => {
       setLoading(true);
 
       const response = await axios.post(
-        "http://localhost:5000/api/v1/auth/login",
+        "https://chain-tech-server-lime.vercel.app/api/v1/auth/login",
         data,
         {
           headers: {
