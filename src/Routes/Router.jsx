@@ -5,6 +5,7 @@ import Main from "../components/Layout/Main";
 import SignUp from "../components/SignUp";
 import Login from "../components/Login";
 import ProFileUpdate from "../components/ProFileUpdate";
+import Other from "../components/Other";
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ export const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/other",
+        element: <Other />,
       },
       {
         path: "/:id",

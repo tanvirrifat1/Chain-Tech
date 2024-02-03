@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 const ProFileUpdate = () => {
-  const { userId, role } = getUserInfo();
+  const { userId } = getUserInfo();
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -72,38 +72,34 @@ const ProFileUpdate = () => {
     if (!image) {
       Swal.fire("Please select Image!");
       setLoading(false);
-      return; // Make sure to set loading to false in case of an early return
+      return;
     }
 
     const formData = new FormData();
     formData.append("image", image);
 
-    // Upload image
     const imageUrl = await uploadImage(formData);
 
     if (imageUrl) {
-      // If image upload is successful, update the data object
       data.image = imageUrl;
 
-      // POST request to your local API
       const apiUrl = `http://localhost:5000/api/v1/user/${userId}`;
       const apiResponse = await fetch(apiUrl, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data), // data object with imageUrl included
+        body: JSON.stringify(data),
       });
 
       if (apiResponse.ok) {
         const responseData = await apiResponse.json();
-        // Handle the response from your API as needed
+
         console.log(responseData);
 
         Swal.fire("User signed up successfully!!");
-        router("/");
+        router("/other");
       } else {
-        // Handle the case where the API request was not successful
         console.error(
           "Failed to make API request:",
           apiResponse.status,
@@ -117,7 +113,7 @@ const ProFileUpdate = () => {
 
   return (
     <div className="my-6">
-      <Link to="/home">
+      <Link to="/">
         <div className="ml-3">
           <BiArrowBack className="text-4xl" />
         </div>
@@ -215,20 +211,11 @@ const ProFileUpdate = () => {
 
           <div className="text-center">
             <button type="submit" className="btn btn-outline w-50 rounded-full">
-              Signup
+              Submit
             </button>
           </div>
         </Form>
       </div>
-      <p className="mt-10 text-center text-sm text-gray-500">
-        not have your account?{" "}
-        <Link
-          to="/login"
-          className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-        >
-          Login
-        </Link>
-      </p>
     </div>
   );
 };

@@ -9,6 +9,7 @@ import Form from "./Shared/form";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { storeUserInfo } from "./Auth/auth.server";
+import { Spinner } from "react-bootstrap";
 
 const Login = () => {
   const router = useNavigate();
@@ -16,46 +17,6 @@ const Login = () => {
 
   const [error, setError] = useState();
   const [check, setCheck] = useState(true);
-
-  //   const handleSubmit = (data) => {
-  //     console.log(data);
-  //   };
-
-  //   const handleSubmit = async (data) => {
-  //     try {
-  //       // Make a POST request to the login endpoint
-  //       const response = await fetch("http://localhost:5000/api/v1/auth/login", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           // You may need to include other headers like 'Accept' or 'Authorization'
-  //         },
-  //         body: JSON.stringify(data), // Convert data to JSON format
-  //       });
-
-  //       // Check if the request was successful (status code 2xx)
-  //       if (response.ok) {
-  //         // Parse the JSON response
-  //         const result = await response.json();
-
-  //         // Assuming the token is in the response, set it in local storage
-  //         const token = result.token;
-  //         localStorage.setItem("token", token);
-
-  //         console.log("Token set in local storage:", token);
-  //         router("/");
-  //       } else {
-  //         // Handle the error (e.g., display an error message)
-  //         console.error(
-  //           "Failed to log in:",
-  //           response.status,
-  //           response.statusText
-  //         );
-  //       }
-  //     } catch (error) {
-  //       console.error("An error occurred during the login request:", error);
-  //     }
-  //   };
 
   const handleSubmit = async (data) => {
     try {
@@ -72,7 +33,7 @@ const Login = () => {
       );
 
       const res = response.data;
-      console.log(res);
+
       if (res?.data) {
         Swal.fire({
           title: `User login successfully`,
@@ -83,7 +44,7 @@ const Login = () => {
             popup: "animate__animated animate__fadeOutUp",
           },
         });
-        router("/");
+        router("/other");
       }
       if (res.error) {
         setError(res.error);
@@ -102,7 +63,7 @@ const Login = () => {
             popup: "animate__animated animate__fadeOutUp",
           },
         });
-        router("/");
+        router("/other");
         setLoading(false);
         storeUserInfo({ accessToken: res?.data });
       }
@@ -110,6 +71,13 @@ const Login = () => {
       console.error(error);
     }
   };
+
+  if (loading) {
+    <Spinner animation="grow" variant="warning" />;
+  }
+  if (error) {
+    Swal.fire("SomeThing Went Wrong!");
+  }
 
   return (
     <div className="my-6">
